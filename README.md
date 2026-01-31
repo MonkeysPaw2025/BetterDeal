@@ -1,6 +1,25 @@
-# RentCast MCP Server
+# RentCast MCP Server & Property Investment Analyzer
 
-Model Context Protocol (MCP) server for connecting Claude with the RentCast API. It provides tools for accessing property data, valuations, and market statistics through the RentCast API.
+Model Context Protocol (MCP) server for connecting Claude with the RentCast API, plus a web application for analyzing property investments from Zillow and Realtor.com links.
+
+## Features
+
+### MCP Server
+- Model Context Protocol (MCP) server for Claude Desktop integration
+- Access to RentCast API for property data, valuations, and market statistics
+
+### Property Investment Analyzer (NEW!)
+- **Web-based property analysis tool**
+- Paste Zillow or Realtor.com URLs to analyze properties
+- Multiple investment strategies: Rental, Flip, BRRRR, House Hack, Long-term Appreciation
+- Support for different loan types: Conventional, FHA, VA, USDA
+- Comprehensive financial analysis including:
+  - Cash flow calculations
+  - Cash-on-cash return
+  - Cap rate
+  - Rental yield
+  - Debt service coverage ratio (DSCR)
+  - Investment scores and recommendations
 
 ## Requirements
 
@@ -8,6 +27,9 @@ Model Context Protocol (MCP) server for connecting Claude with the RentCast API.
 * Model Context Protocol (MCP) Python SDK
 * httpx
 * python-dotenv
+* fastapi (for web app)
+* uvicorn (for web app)
+* pydantic (for web app)
 
 ## Setup
 
@@ -135,6 +157,75 @@ Then you can run:
 
 ```bash
 mcp run src/rentcast_mcp_server/server.py
+```
+
+## Property Investment Analyzer Web App
+
+### Quick Start
+
+Run the web application:
+
+```bash
+# Option 1: Using the run script
+python run_analyzer.py
+
+# Option 2: Using uvicorn directly
+uvicorn src.rentcast_mcp_server.web_app:app --reload --host 0.0.0.0 --port 8000
+
+# Option 3: Using the installed command
+rentcast-analyzer
+```
+
+Then open your browser to **http://localhost:8000**
+
+### How to Use
+
+1. **Paste a Property URL**: Enter a Zillow or Realtor.com property listing URL
+2. **Select Investment Strategy**: Choose from:
+   - **Rental**: Buy and hold for rental income
+   - **Flip**: Buy, renovate, and sell quickly
+   - **BRRRR**: Buy, Rehab, Rent, Refinance, Repeat
+   - **House Hack**: Live in one unit, rent others
+   - **Long-term Appreciation**: Focus on property appreciation
+3. **Configure Loan Details**: 
+   - Select loan type (Conventional, FHA, VA, USDA)
+   - Set interest rate, loan term, down payment
+   - Adjust optional parameters (HOA, maintenance, vacancy rate, etc.)
+4. **Analyze**: Click "Analyze Property" to get comprehensive investment analysis
+
+### What You'll Get
+
+The analysis includes:
+- **Property Information**: Address and source
+- **Loan Details**: Down payment, monthly payment (PITI), loan terms
+- **Investment Metrics**: 
+  - Monthly and annual cash flow
+  - Cash-on-cash return
+  - Cap rate
+  - Rental yield
+  - Debt service coverage ratio
+- **Investment Scores**: Overall score based on your strategy
+- **Recommendations**: Actionable insights and warnings
+
+### Example URLs
+
+- Zillow: `https://www.zillow.com/homedetails/123-Main-St-City-ST-12345/12345678_zpid/`
+- Realtor.com: `https://www.realtor.com/realestateandhomes-detail/123-Main-St_City_ST_12345_M12345_12345`
+
+### API Endpoint
+
+You can also use the API directly:
+
+```bash
+curl -X POST "http://localhost:8000/api/analyze" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "property_url": "https://www.zillow.com/homedetails/...",
+    "strategy": "rental",
+    "loan_type": "conventional",
+    "interest_rate": 0.065,
+    "loan_term_years": 30
+  }'
 ```
 
 ## License

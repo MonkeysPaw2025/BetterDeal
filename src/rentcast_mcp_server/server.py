@@ -98,51 +98,91 @@ async def get_property_data(property_id: str) -> Dict:
             raise
 
 @mcp.tool()
-async def get_property_valuation(property_id: str) -> Dict:
-    """Get valuation data for a specific property. Note: RentCast API may return basic property data instead of detailed valuations depending on subscription tier."""
+async def get_property_valuation(
+    address: str,
+    property_type: Optional[str] = None,
+    bedrooms: Optional[int] = None,
+    bathrooms: Optional[float] = None,
+    square_footage: Optional[int] = None,
+    comp_count: Optional[int] = None,
+) -> Dict:
+    """Get a property value estimate (AVM) based on comparable sales.
+
+    Args:
+        address: Full property address (e.g. "1203 Whiteoak Dr, Edinburg, TX 78541").
+        property_type: Property type (Single Family, Condo, Townhouse, Manufactured, Multi-Family, Apartment).
+        bedrooms: Number of bedrooms (0 for studio).
+        bathrooms: Number of bathrooms.
+        square_footage: Living area in square feet.
+        comp_count: Number of comparable sales to use (5-25, default 15).
+    """
     async with await get_http_client() as client:
         try:
-            response = await client.get(f"/properties/{property_id}/valuation")
+            params: Dict[str, Any] = {"address": address}
+            if property_type is not None:
+                params["propertyType"] = property_type
+            if bedrooms is not None:
+                params["bedrooms"] = bedrooms
+            if bathrooms is not None:
+                params["bathrooms"] = bathrooms
+            if square_footage is not None:
+                params["squareFootage"] = square_footage
+            if comp_count is not None:
+                params["compCount"] = comp_count
+            response = await client.get("/avm/value", params=params)
             response.raise_for_status()
-            data = response.json()
-            
-            # Check if we got actual valuation data or just basic property data
-            valuation_fields = [k for k in data.keys() if any(term in k.lower() for term in ['value', 'estimate', 'price', 'valuation', 'worth'])]
-            if not valuation_fields and len(data.keys()) <= 15:
-                data["_note"] = "API returned basic property data. Valuation data may require higher subscription tier or different endpoint."
-            
-            return data
+            return response.json()
         except httpx.HTTPStatusError as e:
             if e.response.status_code == 404:
-                return {"error": "Property not found", "suggestions": ["Check property ID format", "Try searching by address first"]}
-            logger.error(f"HTTP error getting valuation for property {property_id}: {e.response.status_code}")
+                return {"error": "Property not found", "suggestions": ["Check address format (Street, City, State, Zip)", "Try a different address"]}
+            logger.error(f"HTTP error getting valuation for {address}: {e.response.status_code}")
             raise
         except Exception as e:
-            logger.error(f"Error getting valuation for property {property_id}: {str(e)}")
+            logger.error(f"Error getting valuation for {address}: {str(e)}")
             raise
 
 @mcp.tool()
-async def get_rent_estimate(property_id: str) -> Dict:
-    """Get rent estimate for a specific property. Note: RentCast API may return basic property data instead of detailed rent estimates depending on subscription tier."""
+async def get_rent_estimate(
+    address: str,
+    property_type: Optional[str] = None,
+    bedrooms: Optional[int] = None,
+    bathrooms: Optional[float] = None,
+    square_footage: Optional[int] = None,
+    comp_count: Optional[int] = None,
+) -> Dict:
+    """Get a long-term rent estimate based on comparable rentals.
+
+    Args:
+        address: Full property address (e.g. "1203 Whiteoak Dr, Edinburg, TX 78541").
+        property_type: Property type (Single Family, Condo, Townhouse, Manufactured, Multi-Family, Apartment).
+        bedrooms: Number of bedrooms (0 for studio).
+        bathrooms: Number of bathrooms.
+        square_footage: Living area in square feet.
+        comp_count: Number of comparable rentals to use (5-25, default 15).
+    """
     async with await get_http_client() as client:
         try:
-            response = await client.get(f"/properties/{property_id}/rent-estimate")
+            params: Dict[str, Any] = {"address": address}
+            if property_type is not None:
+                params["propertyType"] = property_type
+            if bedrooms is not None:
+                params["bedrooms"] = bedrooms
+            if bathrooms is not None:
+                params["bathrooms"] = bathrooms
+            if square_footage is not None:
+                params["squareFootage"] = square_footage
+            if comp_count is not None:
+                params["compCount"] = comp_count
+            response = await client.get("/avm/rent/long-term", params=params)
             response.raise_for_status()
-            data = response.json()
-            
-            # Check if we got actual rent estimate data or just basic property data
-            rent_fields = [k for k in data.keys() if any(term in k.lower() for term in ['rent', 'rental', 'estimate', 'monthly'])]
-            if not rent_fields and len(data.keys()) <= 15:
-                data["_note"] = "API returned basic property data. Rent estimate data may require higher subscription tier or different endpoint."
-            
-            return data
+            return response.json()
         except httpx.HTTPStatusError as e:
             if e.response.status_code == 404:
-                return {"error": "Property not found", "suggestions": ["Check property ID format", "Try searching by address first"]}
-            logger.error(f"HTTP error getting rent estimate for property {property_id}: {e.response.status_code}")
+                return {"error": "Property not found", "suggestions": ["Check address format (Street, City, State, Zip)", "Try a different address"]}
+            logger.error(f"HTTP error getting rent estimate for {address}: {e.response.status_code}")
             raise
         except Exception as e:
-            logger.error(f"Error getting rent estimate for property {property_id}: {str(e)}")
+            logger.error(f"Error getting rent estimate for {address}: {str(e)}")
             raise
 
 @mcp.tool()
