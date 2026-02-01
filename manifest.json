@@ -2,7 +2,7 @@
   "dxt_version": "0.1",
   "name": "betterdeal",
   "version": "0.2.0",
-  "description": "RentCast API integration for property data, valuations, and market analytics",
+  "description": "BetterDeal helps you find better real estate deals. MCP server and web app for analyzing property investments from Zillow and Realtor.com links.",
   "author": {
     "name": "Rob Cerda",
     "email": "me@robcerda.com",
