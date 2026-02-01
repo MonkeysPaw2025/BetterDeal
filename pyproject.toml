@@ -1,7 +1,7 @@
 [project]
 name = "betterdeal"
 version = "0.1.0"
-description = "MCP server for RentCast API integration"
+description = "BetterDeal helps you find better real estate deals. MCP server and web app for analyzing property investments from Zillow and Realtor.com links."
 license = {text = "MIT"}
 readme = "README.md"
 authors = [
