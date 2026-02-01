@@ -115,14 +115,72 @@ class RentCastClient:
             params = {"address": address}
             if limit:
                 params["limit"] = limit
-            
+
             response = await client.get("/properties", params=params)
             response.raise_for_status()
             data = response.json()
-            
+
             if isinstance(data, list):
                 return data
             elif isinstance(data, dict) and 'properties' in data:
                 return data['properties']
             else:
                 return [data] if data else []
+
+    async def get_sale_listings(
+        self,
+        zip_code: str,
+        bedrooms: Optional[int] = None,
+        bathrooms: Optional[float] = None,
+        sqft_min: Optional[int] = None,
+        sqft_max: Optional[int] = None,
+        property_type: Optional[str] = None,
+        limit: int = 10,
+    ) -> List[Dict[str, Any]]:
+        """Get active sale listings for comparable analysis."""
+        async with await self.get_http_client() as client:
+            params: Dict[str, Any] = {"zipCode": zip_code, "limit": limit}
+            if bedrooms is not None:
+                params["bedrooms"] = bedrooms
+            if bathrooms is not None:
+                params["bathrooms"] = bathrooms
+            if sqft_min is not None:
+                params["sqftMin"] = sqft_min
+            if sqft_max is not None:
+                params["sqftMax"] = sqft_max
+            if property_type is not None:
+                params["propertyType"] = property_type
+
+            response = await client.get("/listings/sale", params=params)
+            response.raise_for_status()
+            data = response.json()
+            return data if isinstance(data, list) else []
+
+    async def get_rental_listings(
+        self,
+        zip_code: str,
+        bedrooms: Optional[int] = None,
+        bathrooms: Optional[float] = None,
+        sqft_min: Optional[int] = None,
+        sqft_max: Optional[int] = None,
+        property_type: Optional[str] = None,
+        limit: int = 10,
+    ) -> List[Dict[str, Any]]:
+        """Get active rental listings for comparable analysis."""
+        async with await self.get_http_client() as client:
+            params: Dict[str, Any] = {"zipCode": zip_code, "limit": limit}
+            if bedrooms is not None:
+                params["bedrooms"] = bedrooms
+            if bathrooms is not None:
+                params["bathrooms"] = bathrooms
+            if sqft_min is not None:
+                params["sqftMin"] = sqft_min
+            if sqft_max is not None:
+                params["sqftMax"] = sqft_max
+            if property_type is not None:
+                params["propertyType"] = property_type
+
+            response = await client.get("/listings/rental", params=params)
+            response.raise_for_status()
+            data = response.json()
+            return data if isinstance(data, list) else []

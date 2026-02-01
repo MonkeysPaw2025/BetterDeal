@@ -4,7 +4,7 @@ Loan Calculator
 Calculates mortgage payments and costs for different loan types.
 """
 
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 from decimal import Decimal, ROUND_HALF_UP
 
 
@@ -168,10 +168,13 @@ class LoanCalculator:
             "down_payment": round(down_payment, 2),
             "loan_amount": round(loan_amount, 2),
             "interest_rate": round(interest_rate * 100, 3),
+            "interest_rate_decimal": interest_rate,
             "loan_term_years": loan_term_years,
             "monthly_principal_interest": round(monthly_payment, 2),
             "property_tax_monthly": round(property_tax_monthly, 2),
+            "property_tax_annual": round(property_tax_annual, 2),
             "insurance_monthly": round(insurance_monthly, 2),
+            "insurance_annual": round(insurance_annual, 2),
             "pmi_monthly": round(pmi_monthly, 2),
             "hoa_monthly": round(hoa_monthly, 2),
             "total_monthly_payment": round(total_monthly_payment, 2),
@@ -179,3 +182,65 @@ class LoanCalculator:
             "total_interest": round(total_interest, 2),
             "total_cost_of_loan": round(loan_amount + total_interest, 2),
         }
+
+    def generate_amortization_schedule(
+        self,
+        loan_amount: float,
+        annual_rate: float,
+        years: int = 30,
+    ) -> List[Dict[str, float]]:
+        """
+        Generate a year-by-year amortization schedule.
+
+        Returns a list of dicts, one per year, with:
+            year, principal_paid, interest_paid, remaining_balance,
+            cumulative_principal, cumulative_interest
+        """
+        if loan_amount <= 0 or years <= 0:
+            return []
+
+        monthly_rate = annual_rate / 12.0
+        num_payments = years * 12
+        monthly_payment = self.calculate_monthly_payment(loan_amount, annual_rate, years)
+
+        schedule: List[Dict[str, float]] = []
+        balance = loan_amount
+        cumulative_principal = 0.0
+        cumulative_interest = 0.0
+
+        for year in range(1, years + 1):
+            year_principal = 0.0
+            year_interest = 0.0
+
+            for _ in range(12):
+                if balance <= 0:
+                    break
+                if monthly_rate == 0:
+                    interest_payment = 0.0
+                    principal_payment = monthly_payment
+                else:
+                    interest_payment = balance * monthly_rate
+                    principal_payment = monthly_payment - interest_payment
+
+                # Handle final payment rounding
+                if principal_payment > balance:
+                    principal_payment = balance
+                    interest_payment = monthly_payment - principal_payment
+
+                balance -= principal_payment
+                year_principal += principal_payment
+                year_interest += interest_payment
+
+            cumulative_principal += year_principal
+            cumulative_interest += year_interest
+
+            schedule.append({
+                "year": year,
+                "principal_paid": round(year_principal, 2),
+                "interest_paid": round(year_interest, 2),
+                "remaining_balance": round(max(balance, 0), 2),
+                "cumulative_principal": round(cumulative_principal, 2),
+                "cumulative_interest": round(cumulative_interest, 2),
+            })
+
+        return schedule
