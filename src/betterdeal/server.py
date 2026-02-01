@@ -1,5 +1,5 @@
 """
-RentCast MCP Server
+BetterDeal MCP Server
 
 This module implements a Model Context Protocol (MCP) server for connecting
 Claude with the RentCast API. It provides tools for retrieving property
@@ -22,7 +22,7 @@ Usage:
     from environment variables (optionally via a .env file) and communicates with the RentCast API.
 
     To run the server:
-        $ python src/rentcast_mcp_server/server.py
+        $ python src/betterdeal/server.py
 
     MCP tools provided:
         - get_property_data
@@ -57,7 +57,7 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[logging.StreamHandler(sys.stderr)],
 )
-logger = logging.getLogger("rentcast_mcp_server")
+logger = logging.getLogger("betterdeal")
 
 # Load environment variables
 load_dotenv()
@@ -68,7 +68,7 @@ if not RENTCAST_API_KEY:
     raise ValueError("RENTCAST_API_KEY environment variable is required")
 
 # Initialize FastMCP server
-mcp = FastMCP("rentcast-mcp")
+mcp = FastMCP("betterdeal")
 
 # HTTP client will be initialized in main
 
@@ -483,7 +483,7 @@ async def get_rental_listing_by_id(listing_id: str) -> Dict:
 
 def main():
     """Main entry point for the MCP server."""
-    logger.info("Starting RentCast MCP Server...")
+    logger.info("Starting BetterDeal MCP Server...")
     try:
         # API key check before starting the server
         if not RENTCAST_API_KEY:

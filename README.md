@@ -1,4 +1,4 @@
-# RentCast MCP Server & Property Investment Analyzer
+# BetterDeal - Property Investment Analyzer
 
 Model Context Protocol (MCP) server for connecting Claude with the RentCast API, plus a web application for analyzing property investments from Zillow and Realtor.com links.
 
@@ -42,8 +42,8 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ### 2. Clone this repository
 
 ```bash
-git clone https://github.com/yourusername/rentcast-mcp-server.git
-cd rentcast-mcp-server
+git clone https://github.com/yourusername/betterdeal.git
+cd betterdeal
 ```
 
 ### 3. Create and activate a virtual environment
@@ -97,13 +97,13 @@ Then add this server to your Claude Desktop configuration file (`~/Library/Appli
   "mcpServers": {
     "RentCast": {
       "command": "/Users/<USERNAME>/.local/share/uv/tools/mcp/bin/mcp",
-      "args": ["run", "/full/path/to/rentcast-mcp-server/src/rentcast_mcp_server/server.py"]
+      "args": ["run", "/full/path/to/betterdeal/src/betterdeal/server.py"]
     }
   }
 }
 ```
 
-**Important**: Replace `/full/path/to/` with the actual absolute path to your `rentcast-mcp-server` directory.
+**Important**: Replace `/full/path/to/` with the actual absolute path to your `betterdeal` directory.
 
 Restart Claude Desktop after saving the configuration.
 
@@ -136,13 +136,13 @@ pytest -v tests
 To start the server manually (useful when developing or testing), run:
 
 ```bash
-rentcast-mcp
+betterdeal
 ```
 
 Alternatively, you can run it directly with:
 
 ```bash
-uv run python src/rentcast_mcp_server/server.py
+uv run python src/betterdeal/server.py
 ```
 
 ### Installing MCP CLI globally
@@ -156,7 +156,7 @@ uv tool install "mcp[cli]"
 Then you can run:
 
 ```bash
-mcp run src/rentcast_mcp_server/server.py
+mcp run src/betterdeal/server.py
 ```
 
 ## Property Investment Analyzer Web App
@@ -170,10 +170,10 @@ Run the web application:
 python run_analyzer.py
 
 # Option 2: Using uvicorn directly
-uvicorn src.rentcast_mcp_server.web_app:app --reload --host 0.0.0.0 --port 8000
+uvicorn src.betterdeal.web_app:app --reload --host 0.0.0.0 --port 8000
 
 # Option 3: Using the installed command
-rentcast-analyzer
+betterdeal-analyzer
 ```
 
 Then open your browser to **http://localhost:8000**

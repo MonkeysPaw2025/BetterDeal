@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="rentcast-mcp-server",
+    name="betterdeal",
     version="0.1.0",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
@@ -12,7 +12,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "rentcast-mcp=rentcast_mcp_server.server:main",
+            "betterdeal=betterdeal.server:main",
         ],
     },
     python_requires=">=3.12",

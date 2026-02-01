@@ -4,7 +4,7 @@ Quick start script for the Property Investment Analyzer web app.
 """
 
 import uvicorn
-from src.rentcast_mcp_server.web_app import app
+from src.betterdeal.web_app import app
 
 if __name__ == "__main__":
     print("🏠 Starting Property Investment Analyzer...")

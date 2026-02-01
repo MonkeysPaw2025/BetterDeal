@@ -1,26 +1,26 @@
 {
   "dxt_version": "0.1",
-  "name": "rentcast-mcp",
+  "name": "betterdeal",
   "version": "0.2.0",
   "description": "RentCast API integration for property data, valuations, and market analytics",
   "author": {
     "name": "Rob Cerda",
     "email": "me@robcerda.com",
-    "url": "https://github.com/robcerda/rentcast-mcp-server"
+    "url": "https://github.com/robcerda/betterdeal"
   },
   "license": "MIT",
-  "homepage": "https://github.com/robcerda/rentcast-mcp-server",
+  "homepage": "https://github.com/robcerda/betterdeal",
   "repository": {
     "type": "git",
-    "url": "https://github.com/robcerda/rentcast-mcp-server.git"
+    "url": "https://github.com/robcerda/betterdeal.git"
   },
   "keywords": ["real-estate", "property", "valuation", "rentcast", "mcp"],
   "server": {
     "type": "python",
-    "entry_point": "src/rentcast_mcp_server/server.py",
+    "entry_point": "src/betterdeal/server.py",
     "mcp_config": {
       "command": "python",
-      "args": ["${__dirname}/src/rentcast_mcp_server/server.py"],
+      "args": ["${__dirname}/src/betterdeal/server.py"],
       "env": {
         "RENTCAST_API_KEY": "${user_config.api_key}"
       }
