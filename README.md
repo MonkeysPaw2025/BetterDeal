@@ -1,14 +1,14 @@
 # BetterDeal - Property Investment Analyzer
 
-Model Context Protocol (MCP) server for connecting Claude with the RentCast API, plus a web application for analyzing property investments from Zillow and Realtor.com links.
+BetterDeal helps you find better real estate deals. It's an MCP server and web app that analyzes property investments from Zillow and Realtor.com links, powered by the RentCast API for property data, valuations, and market statistics.
 
 ## Features
 
 ### MCP Server
-- Model Context Protocol (MCP) server for Claude Desktop integration
-- Access to RentCast API for property data, valuations, and market statistics
+- Claude Desktop integration via Model Context Protocol (MCP)
+- Property data, valuations, and market statistics from the RentCast API
 
-### Property Investment Analyzer (NEW!)
+### Web App
 - **Web-based property analysis tool**
 - Paste Zillow or Realtor.com URLs to analyze properties
 - Multiple investment strategies: Rental, Flip, BRRRR, House Hack, Long-term Appreciation
@@ -95,7 +95,7 @@ Then add this server to your Claude Desktop configuration file (`~/Library/Appli
 ```json
 {
   "mcpServers": {
-    "RentCast": {
+    "BetterDeal": {
       "command": "/Users/<USERNAME>/.local/share/uv/tools/mcp/bin/mcp",
       "args": ["run", "/full/path/to/betterdeal/src/betterdeal/server.py"]
     }
@@ -109,7 +109,7 @@ Restart Claude Desktop after saving the configuration.
 
 ### 2. Use the MCP server with Claude
 
-Once configured, Claude Desktop will have access to these RentCast tools:
+Once configured, Claude Desktop will have access to these tools:
 
 * **`get_property_data`**: Get detailed property data for a specific property ID
 * **`get_property_valuation`**: Get property value estimates
